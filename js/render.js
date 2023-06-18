@@ -29,6 +29,11 @@ function render(component, props, structure, parent, contentChildren) {
 				parent.place.parentNode.removeChild(elementContext.place)
 			}
 			
+			elementContext.children.forEach(function(child) {
+				child.destroy()
+			})
+			elementContext.children.splice(0, elementContext.children.length)
+			
 			if(props.get()) {
 				if(structure) {
 					structure.forEach(function(innerElement) {
@@ -37,14 +42,13 @@ function render(component, props, structure, parent, contentChildren) {
 					})
 				}
 			}
-			else {
+			
+			props.bind(function(newValue) {
 				elementContext.children.forEach(function(child) {
 					child.destroy()
 				})
 				elementContext.children.splice(0, elementContext.children.length)
-			}
-			
-			props.bind(function(newValue) {
+				
 				if(newValue) {
 					if(structure) {
 						structure.forEach(function(innerElement) {
@@ -52,12 +56,6 @@ function render(component, props, structure, parent, contentChildren) {
 							elementContext.children.push(innerElementContext)
 						})
 					}
-				}
-				else {
-					elementContext.children.forEach(function(child) {
-						child.destroy()
-					})
-					elementContext.children.splice(0, elementContext.children.length)
 				}
 			})
 		}
